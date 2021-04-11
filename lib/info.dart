@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
-import 'package:intro_slider/slide_object.dart';
+import 'package:hackathon_bi_musorapp/trash_data.dart';
 import 'package:qr_mobile_vision/qr_camera.dart';
 
 class Info extends StatefulWidget {
@@ -9,120 +9,31 @@ class Info extends StatefulWidget {
   State<StatefulWidget> createState() => _InfoState();
 }
 
-class TrashType {
-  final String title;
-  final String description;
-  final String assetUri;
-
-  TrashType({this.title, this.description, this.assetUri});
-}
-
 class InfoSlides extends StatelessWidget {
-  final List<TrashType> data = [
-    TrashType(
-      title: "PET(E) или ПЭТ",
-      description:
-          "полиэтилентерефталат: обычно это бутылки с выпуклой точкой на дне, в которых продают воду, газировку, молоко, масло. Также из ПЭТа часто делают прозрачные флаконы для шампуней, одноразовые пищевые контейнеры. Его можно сдать на переработку.",
-      assetUri: 'assets/images/1.png',
-    ),
-    TrashType(
-      title: "PEHD (HDPE) или ПНД",
-      description:
-          "полиэтилен низкого давления: канистры, крышки для бутылок, флаконы из-под косметики и бытовой химии. Его можно сдать на переработку.",
-      assetUri: "assets/images/2.png",
-    ),
-    TrashType(
-      title: "PVC или ПВХ",
-      description:
-          "поливинилхлорид: оконные рамы, блистеры, упаковки из-под таблеток, а также тортов и творога, термоусадочная плёнка, флаконы для косметики, игрушки. Избегайте такой упаковки, она вредна, её практически невозможно сдать на переработку.",
-      assetUri: "assets/images/3.png",
-    ),
-    TrashType(
-      title: "PELD (LDPE) или ПВД",
-      description:
-          " полиэтилен высокого давления (низкой плотности): пакеты и плёнка. Четвёрку можно сдать на переработку, но придётся поискать где.",
-      assetUri: "assets/images/4.png",
-    ),
-    TrashType(
-      title: "PP или ПП",
-      description:
-          "полипропилен: крышки для бутылок, вёдра и ведёрки, стаканчики для йогурта, упаковка линз, шуршащая пластиковая упаковка. Пятёрку можно сдать на переработку.",
-      assetUri: "assets/images/5.png",
-    ),
-    TrashType(
-      title: "PS или ПС",
-      description:
-          "полистирол, бывает обычный и вспененный. Из вспененного полистирола делают пенопласт, контейнеры для яиц, подложки для мяса и фасовки. Из обычного полистирола — стаканчики для йогурта и упаковку для компакт-дисков, а также почти всю одноразовую посуду. Можно сдать на переработку, но лучше избегать такую упаковку, она вредна.",
-      assetUri: "assets/images/6.png",
-    ),
-    TrashType(
-      title: "O(ther) или ДРУГОЕ",
-      description:
-          "Смесь различных пластиков или полимеры, не указанные выше. Например, упаковка для сыра, кофе, корма для животных. Переработке не подлежит.",
-      assetUri: "assets/images/7.png",
-    ),
-    TrashType(
-      title: "20–22 (PAP)",
-      description:
-          "бумага и картон. Коробки от бытовой техники, продуктов, косметики; открытки, обложки книг, журналы и газеты, конверты, бумажные пакеты, бумага для печати. Можно сдать на переработку.",
-      assetUri: "assets/images/8.png",
-    ),
-    TrashType(
-      title: "40 (FE)",
-      description:
-          "жесть: консервные банки, баллончики аэрозолей. Консервные банки можно сдать на переработку, баллончики принимают не везде.",
-      assetUri: "assets/images/9.png",
-    ),
-    TrashType(
-      title: "41 (ALU)",
-      description:
-          "алюминий: банки для напитков и фольга. Можно сдать на переработку, но фольгу принимают только в Петербурге.",
-      assetUri: "assets/images/10.png",
-    ),
-    TrashType(
-      title: "70–74 (GL)",
-      description:
-          "стекло и стеклотара. Бесцветное прозрачное, зелёное, коричневое, светло-коричневое и тёмно-коричневое бутылочное стекло. Банки и бутылки можно сдать на переработку.",
-      assetUri: "assets/images/11.png",
-    ),
-    TrashType(
-      title: "81–84 (С/PAP) ",
-      description:
-          "композиционные материалы: многослойная упаковка из бумаги, пластика и иногда металла. Такую упаковку называют «тетрапаком» или «пюрпаком» и используют, например, для сока и молочных продуктов. Можно сдать, но переработка очень сложная и дорогая.",
-      assetUri: "assets/images/12.png",
-    ),
-    TrashType(
-      title: "d2w",
-      description:
-          "d2w указывает на так называемый оксоразлагаемый пластик. Знак ставят на пластиковую упаковку, в состав которой добавили присадку — компонент, отвечающий за быстрый распад пластика на микрочастицы. В переработку этот пластик сдавать нельзя. Такие товары лучше не покупать.",
-      assetUri: "assets/images/d2w.png",
-    ),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    final List<Slide> slides = data
-        .map(
-          (e) => Slide(
-            backgroundColor: Colors.white,
-            title: e.title,
-            styleTitle: Theme.of(context)
-                .textTheme
-                .headline4
-                .copyWith(fontWeight: FontWeight.bold),
-            description: e.description,
-            styleDescription:
-                Theme.of(context).textTheme.headline6.copyWith(fontSize: 18),
-            pathImage: e.assetUri,
-          ),
-        )
-        .toList();
+    // final List<Slide> slides = trashData
+    //     .map(
+    //       (e) => Slide(
+    //         backgroundColor: Colors.white,
+    //         title: e.title,
+    //         styleTitle: Theme.of(context)
+    //             .textTheme
+    //             .headline4
+    //             .copyWith(fontWeight: FontWeight.bold),
+    //         description: e.description,
+    //         styleDescription:
+    //             Theme.of(context).textTheme.headline6.copyWith(fontSize: 18),
+    //         pathImage: e.assetUri,
+    //       ),
+    //     )
+    //     .toList();
     final size = MediaQuery.of(context).size;
 
     return Swiper(
       layout: SwiperLayout.STACK,
       plugins: [SwiperPagination()],
-      itemCount: data.length,
+      itemCount: trashData.length,
       itemWidth: size.width * 0.95,
       itemBuilder: (context, index) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -136,7 +47,7 @@ class InfoSlides extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      data[index].title,
+                      trashData[index].title,
                       style: Theme.of(context)
                           .textTheme
                           .headline4
@@ -144,7 +55,7 @@ class InfoSlides extends StatelessWidget {
                       textAlign: TextAlign.center,
                     ),
                     Image.asset(
-                      data[index].assetUri,
+                      trashData[index].assetUri,
                       width: size.width * 0.4,
                     ),
                   ],
@@ -153,7 +64,7 @@ class InfoSlides extends StatelessWidget {
               Expanded(
                 flex: 1,
                 child: Text(
-                  data[index].description,
+                  trashData[index].description,
                   style: Theme.of(context).textTheme.headline6,
                   textAlign: TextAlign.center,
                 ),
@@ -167,6 +78,10 @@ class InfoSlides extends StatelessWidget {
 }
 
 class QrScan extends StatefulWidget {
+  final VoidCallback onWindowClose;
+
+  const QrScan({Key key, this.onWindowClose}) : super(key: key);
+
   @override
   State<StatefulWidget> createState() => _QrScanState();
 }
@@ -176,49 +91,129 @@ class _QrScanState extends State<QrScan> {
 
   @override
   Widget build(BuildContext context) {
-    return QrCamera(qrCodeCallback: (code) async {
-      if (isScanning) {
-        isScanning = false;
-        final f = Future.delayed(Duration(seconds: 1)).then((value) => "s");
-        await showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  FutureBuilder(
-                    future: f,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Center(
-                          child: Card(
-                            child: ListTile(
-                              title: Text("YOURRE TRASH"),
+    final size = MediaQuery.of(context).size;
+    return QrCamera(
+      qrCodeCallback: (code) async {
+        if (isScanning) {
+          isScanning = false;
+          final f = Future.delayed(Duration(seconds: 1)).then((value) => "s");
+          await showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    FutureBuilder(
+                      future: f,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          final t = trashData[5];
+                          // final t = null;
+                          return Container(
+                            height: size.height * 0.5,
+                            width: size.width * 0.8,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 8.0),
+                              child: t == null
+                                  ? Column(
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Text(
+                                            "Не найдено в базе, пожалуйста, выберите маркировку на продукте",
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 5,
+                                          child: GridView.count(
+                                            crossAxisCount: 3,
+                                            children: trashData
+                                                .map(
+                                                  (e) => InkWell(
+                                                    child:
+                                                        Image.asset(e.assetUri),
+                                                    onTap: (){},
+                                                  ),
+                                                )
+                                                .toList(),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : Column(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Expanded(
+                                          flex: 1,
+                                          child: Center(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Text(
+                                                  t.title,
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headline6
+                                                      .copyWith(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                                Image.asset(
+                                                  t.assetUri,
+                                                  width: size.width * 0.4,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        Expanded(
+                                          flex: 1,
+                                          child: Center(
+                                            child: Text(
+                                              t.description,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyText2,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
                             ),
-                          ),
-                        );
-                      } else if (snapshot.hasError) {
-                        return Center(
-                          child: Card(
-                            child: Text("${snapshot.error}"),
-                          ),
-                        );
-                      } else {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    },
+                          );
+                        } else if (snapshot.hasError) {
+                          return Center(
+                            child: Card(
+                              child: Text("${snapshot.error}"),
+                            ),
+                          );
+                        } else {
+                          return Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: Text("Закрыть"),
                   ),
                 ],
-              ),
-            );
-          },
-        );
-        isScanning = true;
-      }
-    });
+              );
+            },
+          );
+          isScanning = true;
+        }
+      },
+    );
   }
 }
 
@@ -466,14 +461,17 @@ class TrashInfo extends StatelessWidget {
   }
 }
 
-class _InfoState extends State<Info> {
+class _InfoState extends State<Info> with TickerProviderStateMixin {
   int currentTab = 0;
   final List<Widget> tabs = [
     TrashInfo(),
     InfoSlides(),
-    QrScan(),
+    QrScan(
+      onWindowClose: () {},
+    ),
   ];
   bool isScanning = true;
+  TabController _controller;
 
   @override
   Widget build(BuildContext context) {
@@ -485,6 +483,7 @@ class _InfoState extends State<Info> {
           title: Text("Памятка"),
           elevation: 0,
           bottom: TabBar(
+            controller: _controller,
             onTap: (value) => setState(() => currentTab = value),
             tabs: [
               Padding(
@@ -493,7 +492,7 @@ class _InfoState extends State<Info> {
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 10.0),
-                child: Icon(Icons.info),
+                child: Icon(FontAwesome5.recycle),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 10.0),

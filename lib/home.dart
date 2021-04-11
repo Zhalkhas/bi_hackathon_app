@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
-import 'package:hackathon_bi_musorapp/camera.dart';
-import 'package:hackathon_bi_musorapp/icons.dart';
+import 'package:fluttericon/font_awesome_icons.dart';
 import 'package:hackathon_bi_musorapp/info.dart';
 import 'package:hackathon_bi_musorapp/submit.dart';
 import 'package:hackathon_bi_musorapp/tracking.dart';
+
+import 'rating.dart';
 
 class AppHome extends StatefulWidget {
   @override
@@ -22,7 +23,7 @@ class _AppHomeState extends State<AppHome> {
     super.initState();
     widgets.add(Info());
     widgets.add(SubmitWidget());
-    widgets.add(BarcodeScanner());
+    widgets.add(Rating());
     widgets.add(TrashTracking());
   }
 
@@ -45,11 +46,11 @@ class _AppHomeState extends State<AppHome> {
             label: 'Сдача мусора',
           ),
           BottomNavigationBarItem(
-            icon: Icon(FontAwesome5.trophy),
-            label: 'Таблица рекордов',
+            icon: Icon(FontAwesome.star),
+            label: 'Рейтинг',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.location_on_outlined),
+            icon: Icon(FontAwesome5.search_location),
             label: 'Трекинг',
           ),
         ],

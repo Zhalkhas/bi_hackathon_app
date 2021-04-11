@@ -135,6 +135,16 @@ class BottomCurve extends CustomPainter {
     path.lineTo(0, size.height);
 
     canvas.drawPath(path, paint);
+
+    // var paint = Paint();
+    // paint.color = Colors.green;
+    // paint.style = PaintingStyle.fill;
+    // paint.strokeWidth = 2.0;
+
+    var backCurve = Path();
+    backCurve.moveTo(0, size.height * 0.93);
+    path.quadraticBezierTo(size.width * 0.25, size.height * 0.875,
+        size.width * 0.5, size.height * 0.9167);
   }
 
   @override

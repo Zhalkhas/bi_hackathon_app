@@ -8,69 +8,127 @@ import 'login.dart';
 class AppIntroSlider extends StatelessWidget {
   final _slides = [
     Slide(
-        title: "SCHOOL",
+        title: "Добро пожаловать!",
         styleTitle: TextStyle(
-            color: Color(0xff3da4ab),
-            fontSize: 30.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'RobotoMono'),
+          color: Colors.green,
+          fontSize: 30.0,
+          fontWeight: FontWeight.bold,
+        ),
         description:
-            "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.",
+            "Это приложение поможет вам практиковать раздельный сбор мусора и Вы своими усилиями сделаете планету чище для себя, своих близких и для нас! Спасибо!",
         styleDescription: TextStyle(
-            color: Color(0xfffe9c8f),
-            fontSize: 20.0,
-            fontStyle: FontStyle.italic,
-            fontFamily: 'Raleway'),
-        pathImage: "images/photo_school.png",
+          color: Colors.green,
+          fontSize: 20.0,
+          fontStyle: FontStyle.italic,
+        ),
+        pathImage: "assets/images/intro_1.png",
         colorBegin: Colors.transparent,
         colorEnd: Colors.transparent),
     Slide(
-        title: "MUSEUM",
+        title: "Трекинг",
         styleTitle: TextStyle(
-            color: Color(0xff3da4ab),
-            fontSize: 30.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'RobotoMono'),
+          color: Colors.green,
+          fontSize: 30.0,
+          fontWeight: FontWeight.bold,
+        ),
         description:
-            "Ye indulgence unreserved connection alteration appearance",
+            "Отслеживайте местоположение сортированного Вами мусора до пункта приема",
         styleDescription: TextStyle(
-            color: Color(0xfffe9c8f),
-            fontSize: 20.0,
-            fontStyle: FontStyle.italic,
-            fontFamily: 'Raleway'),
-        pathImage: "images/photo_museum.png",
+          color: Colors.green,
+          fontSize: 20.0,
+          fontStyle: FontStyle.italic,
+        ),
+        pathImage: "assets/images/intro_2.png",
         colorBegin: Colors.transparent,
         colorEnd: Colors.transparent),
     Slide(
-        title: "COFFEE SHOP",
+        title: "Учет сортировки",
         styleTitle: TextStyle(
-            color: Color(0xff3da4ab),
-            fontSize: 30.0,
-            fontWeight: FontWeight.bold,
-            fontFamily: 'RobotoMono'),
-        description:
-            "Much evil soon high in hope do view. Out may few northward believing attempted. Yet timed being songs marry one defer men our. Although finished blessing do of",
+          color: Colors.green,
+          fontSize: 30.0,
+          fontWeight: FontWeight.bold,
+        ),
+        description: "Ведите личный учет сдачи мусора и получайте за это баллы",
         styleDescription: TextStyle(
-            color: Color(0xfffe9c8f),
-            fontSize: 20.0,
-            fontStyle: FontStyle.italic,
-            fontFamily: 'Raleway'),
-        pathImage: "images/photo_coffee_shop.png",
+          color: Colors.green,
+          fontSize: 20.0,
+          fontStyle: FontStyle.italic,
+        ),
+        pathImage: "assets/images/intro_3.png",
+        colorBegin: Colors.transparent,
+        colorEnd: Colors.transparent),
+    Slide(
+        title: "Сканер штрих кодов",
+        styleTitle: TextStyle(
+          color: Colors.green,
+          fontSize: 30.0,
+          fontWeight: FontWeight.bold,
+        ),
+        description:
+            "А так же Вы можете узнать типа мусора отсканировав штрих-код или QR-код упаковки",
+        styleDescription: TextStyle(
+          color: Colors.green,
+          fontSize: 20.0,
+          fontStyle: FontStyle.italic,
+        ),
+        pathImage: "assets/images/intro_4.png",
+        colorBegin: Colors.transparent,
+        colorEnd: Colors.transparent),
+    Slide(
+        title: "Памятка для новичков",
+        styleTitle: TextStyle(
+          color: Colors.green,
+          fontSize: 30.0,
+          fontWeight: FontWeight.bold,
+        ),
+        description:
+            "Определяйте тип мусора с помощью встроенной инструкции во вкладке \"Памятка\"",
+        styleDescription: TextStyle(
+          color: Colors.green,
+          fontSize: 20.0,
+          fontStyle: FontStyle.italic,
+        ),
+        pathImage: "assets/images/intro_5.png",
+        colorBegin: Colors.transparent,
+        colorEnd: Colors.transparent),
+    Slide(
+        title: "Начните сегодня!",
+        styleTitle: TextStyle(
+          color: Colors.green,
+          fontSize: 30.0,
+          fontWeight: FontWeight.bold,
+        ),
+        description:
+            "Будьте основоположником современного развития экологии в нашей стране, осознанным гражданином",
+        styleDescription: TextStyle(
+          color: Colors.green,
+          fontSize: 20.0,
+          fontStyle: FontStyle.italic,
+        ),
+        pathImage: "assets/images/intro_6.png",
         colorBegin: Colors.transparent,
         colorEnd: Colors.transparent),
   ];
 
   @override
-  Widget build(BuildContext context) => CustomPaint(
-      painter: BottomCurve(),
-      child: IntroSlider(
-        backgroundColorAllSlides: Colors.transparent,
-        slides: _slides,
-        onDonePress: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => Login(),
-          ),
-        ),
-      ));
+  Widget build(BuildContext context) => Container(
+        color: Colors.white,
+        child: CustomPaint(
+            painter: BottomCurve(),
+            child: IntroSlider(
+              nameNextBtn: "След.",
+              namePrevBtn: "Пред.",
+              isShowSkipBtn: false,
+              isShowPrevBtn: true,
+              nameDoneBtn: "Вход",
+              backgroundColorAllSlides: Colors.transparent,
+              slides: _slides,
+              onDonePress: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Login(),
+                ),
+              ),
+            )),
+      );
 }
