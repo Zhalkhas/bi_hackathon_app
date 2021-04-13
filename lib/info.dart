@@ -1,8 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
+import 'package:hackathon_bi_musorapp/consts.dart';
 import 'package:hackathon_bi_musorapp/trash_data.dart';
 import 'package:qr_mobile_vision/qr_camera.dart';
+import 'package:http/http.dart' as http;
 
 class Info extends StatefulWidget {
   @override
@@ -33,7 +37,7 @@ class InfoSlides extends StatelessWidget {
     return Swiper(
       layout: SwiperLayout.STACK,
       plugins: [SwiperPagination()],
-      itemCount: trashData.length,
+      itemCount: trashData.length - 1,
       itemWidth: size.width * 0.95,
       itemBuilder: (context, index) => Padding(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -92,11 +96,25 @@ class _QrScanState extends State<QrScan> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
+    Future<TrashType> getTrash(String code) async {
+      print('doing get');
+      final resp = await http.get("$baseURL/bihack/rest/item/$code");
+      print('resp $resp');
+      if (resp.statusCode == 500) {
+        print('no responce');
+        return trashData.last;
+      }
+      final json = jsonDecode(resp.body);
+      print("found somth $json");
+      return trashData
+          .firstWhere((element) => element.title.contains(json['type'].substring(0,4)));
+    }
+
     return QrCamera(
       qrCodeCallback: (code) async {
         if (isScanning) {
           isScanning = false;
-          final f = Future.delayed(Duration(seconds: 1)).then((value) => "s");
           await showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -105,18 +123,18 @@ class _QrScanState extends State<QrScan> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     FutureBuilder(
-                      future: f,
+                      future: getTrash(code),
                       builder: (context, snapshot) {
                         if (snapshot.hasData) {
-                          final t = trashData[5];
-                          // final t = null;
+                          var t = snapshot.data;
+
                           return Container(
                             height: size.height * 0.5,
                             width: size.width * 0.8,
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 8.0),
-                              child: t == null
+                              child: t.title.contains("404")
                                   ? Column(
                                       children: [
                                         Expanded(
@@ -130,11 +148,25 @@ class _QrScanState extends State<QrScan> {
                                           child: GridView.count(
                                             crossAxisCount: 3,
                                             children: trashData
+                                                .sublist(
+                                                    0, trashData.length - 1)
                                                 .map(
                                                   (e) => InkWell(
                                                     child:
                                                         Image.asset(e.assetUri),
-                                                    onTap: (){},
+                                                    onTap: () async {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                      print("sending");
+                                                      var resp = await http.post(
+                                                          "$baseURL/bihack/rest/item/new/",
+                                                          body: jsonEncode({
+                                                            'code': code,
+                                                            'type': e.title
+                                                          }));
+                                                      print(
+                                                          'sent ${resp.statusCode}: ${resp.body}');
+                                                    },
                                                   ),
                                                 )
                                                 .toList(),

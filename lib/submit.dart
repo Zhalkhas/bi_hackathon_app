@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:animated_check/animated_check.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:hackathon_bi_musorapp/consts.dart';
+import 'package:http/http.dart' as http;
 import 'trash_data.dart';
 
 class SubmitWidget extends StatefulWidget {
@@ -16,7 +21,7 @@ class _SubmitWidgetState extends State<SubmitWidget>
   void initData() {
     data = {
       'Пластик': List.from(trashData.sublist(0, 7)),
-      'Остальные материалы': List.from(trashData.sublist(7)),
+      'Остальные материалы': List.from(trashData.sublist(7, 14)),
     };
   }
 
@@ -73,6 +78,39 @@ class _SubmitWidgetState extends State<SubmitWidget>
         ));
       });
     });
+
+    Future submitResult() async {
+      Map<String, dynamic> base = {};
+      final List<TrashType> vals = data.values.fold<List<TrashType>>(
+          [], (previousValue, element) => previousValue..addAll(element));
+
+      final filteredVals = vals.where((element) => element.count > 0);
+      Future createHistoryEntry(TrashType element) async {
+        final resp = await http.post("$baseURL/bihack/rest/history/",
+            body: jsonEncode({
+              "user": FirebaseAuth.instance.currentUser.uid,
+              "residence": "ЖК BI Group",
+              "type": element.title,
+              "amount": element.count,
+            }));
+        print("responce ${resp.statusCode} ${resp.body}");
+        return resp.statusCode == 200;
+      }
+
+      List<Future> futures = [];
+      filteredVals.forEach((element) async {
+        //   await http.post("$baseURL/bihack/rest/history/",
+        //       body: jsonEncode({
+        //         "user": FirebaseAuth.instance.currentUser.uid,
+        //         "residence": "ЖК BI Group",
+        //         "type": element.title,
+        //         "amount": element.count,
+        //       }));
+        futures.add(createHistoryEntry(element));
+      });
+      return Future.wait(futures);
+    }
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -87,40 +125,62 @@ class _SubmitWidgetState extends State<SubmitWidget>
                   context: context,
                   builder: (context) {
                     _animationController.forward();
-                    return AlertDialog(
-                      title: Text(
-                        "Поздравляем!",
-                        textAlign: TextAlign.center,
-                      ),
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Container(
-                            child: AnimatedCheck(
-                              progress: _animation,
-                              size: 200,
-                              color: Colors.white,
-                            ),
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: Colors.green,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 25.0),
-                            child: Text(
-                              "Вы сдали мусор и сделали шаг в более чистое и светлое будущее! Вы можете отслеживать ваш мусор во вкладке \"Трекинг\"",
-                            ),
-                          ),
-                        ],
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () => Navigator.pop(context),
-                          child: Text("Закрыть"),
-                        ),
-                      ],
-                    );
+                    return FutureBuilder(
+                        future: submitResult(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            print('resp ${snapshot.data}');
+                            return AlertDialog(
+                              title: Text(
+                                "Поздравляем!",
+                                textAlign: TextAlign.center,
+                              ),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    child: AnimatedCheck(
+                                      progress: _animation,
+                                      size: 200,
+                                      color: Colors.white,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.green,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 25.0),
+                                    child: Text(
+                                      "Вы сдали мусор и сделали шаг в более чистое и светлое будущее! Вы можете отслеживать ваш мусор во вкладке \"Трекинг\"",
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: Text("Закрыть"),
+                                ),
+                              ],
+                            );
+                          } else if (snapshot.hasError) {
+                            print("ERROR: ${snapshot.error}");
+                            return AlertDialog(
+                              content: Text("${snapshot.error}"),
+                            );
+                          } else {
+                            return AlertDialog(
+                              content: Center(
+                                child: Container(
+                                  width: 50,
+                                  height: 50,
+                                  child: CircularProgressIndicator(),
+                                ),
+                              ),
+                            );
+                          }
+                        });
                     // return FutureBuilder(
                     //   future: f,
                     //   builder: (context, snapshot) {

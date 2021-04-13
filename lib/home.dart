@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
@@ -29,6 +30,8 @@ class _AppHomeState extends State<AppHome> {
 
   @override
   Widget build(BuildContext context) {
+    print("fid ${FirebaseAuth.instance.currentUser.uid}");
+
     return Scaffold(
       body: SafeArea(child: widgets[currentTab]),
       bottomNavigationBar: CupertinoTabBar(

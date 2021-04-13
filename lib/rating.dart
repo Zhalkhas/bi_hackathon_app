@@ -44,13 +44,32 @@ class Rating extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Future f() async {
+      return await Future.delayed(Duration(seconds: 1)).then((value) => 1);
+    }
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
         centerTitle: true,
         title: Text("Рейтинг"),
       ),
-      body: RatingList(),
+      body: FutureBuilder(
+        future: f(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return RatingList();
+          } else {
+            return Center(
+              child: SizedBox(
+                width: 50,
+                height: 50,
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+        },
+      ),
       // FutureBuilder(
       //   // future: f,
       //   builder: (context, snapshot) {
